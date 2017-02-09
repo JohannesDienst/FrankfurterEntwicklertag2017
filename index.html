@@ -46,6 +46,232 @@
           <p class="fragment fade-up">(Hoffentlich!) live</p>
         </section>
 
+        <section>
+          <h2>TypeScript</h2>
+          <p><pre><code data-trim data-noescape>$> npm install --save-dev typescript</code></pre></p>
+        </section>
+        
+        <section>
+          <h2>Deklarationsdateien</h2>
+          <p><pre><code data-trim data-noescape>$> npm install --save-dev @types/jquery</code></pre></p>
+        </section>
+
+        <section>
+          <h2>tsconfig.json</h2>
+          <p><pre><code data-trim data-noescape>$> ./../node_modules/typescript/bin/tsc --init
+message TS6071: Successfully created a tsconfig.json file.</code></pre></p>
+        </section>
+
+        <section>
+          <h2>tsconfig.json (2)</h2>
+          <p><pre><code data-trim data-noescape>{
+    "compilerOptions": {
+        "module": "commonjs",
+        "target": "es5",
+        "noImplicitAny": false,
+        "sourceMap": false,
+        "rootDir": ".",
+        "outDir": "./../build",
+        "removeComments": true
+    },
+    "compileOnSave": false,
+    "moduleResolution": "node",
+    "exclude": [
+        "node_modules"
+    ]
+}</code></pre></p>
+        </section>
+
+        <section>
+          <h2>package.json - TypeScript Tasks</h2>
+          <p><pre><code data-trim data-noescape>"deploy:tsc": "./node_modules/typescript/bin/tsc -p ./src",
+"watch:tsc": "nodemon --verbose -w src/ --on-change-only -d 1 -e ts --exec \"npm run deploy:tsc\""</code></pre></p>
+        </section>
+
+        <section>
+          <h2>TypeScript Kompilieren</h2>
+          <p><pre><code data-trim data-noescape>$> npm run deploy:tsc
+
+> superherorelations@1.0.0 deploy:tsc /home/jdienst/git/SuperheroRelations
+> ./node_modules/typescript/bin/tsc -p ./src</code></pre></p>
+        </section>
+
+        <section>
+          <h2>TypeScript Watch Job</h2>
+          <p><pre><code data-trim data-noescape>$> npm run watch:tsc
+
+> superherorelations@1.0.0 watch:tsc /home/jdienst/git/SuperheroRelations
+> nodemon --verbose -w src/ --on-change-only -d 1 -e ts --exec "npm run deploy:tsc"
+
+[nodemon] 1.11.0
+[nodemon] to restart at any time, enter `rs`
+[nodemon] ignoring: /home/jdienst/git/SuperheroRelations/.git/**/* .nyc_output .sass-cache bower_components coverage /home
+/jdienst/git/SuperheroRelations/node_modules/**/*
+[nodemon] watching: /home/jdienst/git/SuperheroRelations/src/**/*
+[nodemon] watching extensions: ts
+[nodemon] child pid: 10695
+[nodemon] watching 8 files</code></pre></p>
+        </section>
+
+        <section>
+          <h2>src/routes/base_route.ts anlegen</h2>
+          <p><pre><code data-trim data-noescape>export class BaseRoute {
+  constructor(){};
+}</code></pre></p>
+        </section>
+
+        <section>
+          <h2>Datenbank- hero_db.json</h2>
+          <p><pre><code data-trim data-noescape>{ 
+  "heros" : [
+    {
+      "id": 1,
+      "name": "Arrow"
+    },
+    {
+      "id": 2,
+      "name": "Flash"
+    },
+    {
+      "id": 3,
+      "name": "Batman"
+    },
+    {
+      "id": 4,
+      "name": "Superman"
+    },
+    {
+      "id": 5,
+      "name": "Vibe"
+    }
+  ]
+}</code></pre></p>
+        </section>
+
+        <section>
+          <h2>src/hero_db.ts - Modell als Interfaces</h2>
+          <p><pre><code data-trim data-noescape>interface Hero {
+  id: number;
+  name: string;
+}
+
+interface HeroDB {
+  heros: Array<Hero>;
+}</code></pre></p>
+        </section>
+
+        <section>
+          <h2>HeroRoute - src/routes/hero_route.ts</h2>
+          <section>
+            <p><pre><code data-trim data-noescape>/// &lt;reference path="./../hero_db.ts" /&gt;
+const data: HerosDB = require("./../../hero_db.json");</code></pre></p>
+          </section>
+          <section>
+            <p><pre><code data-trim data-noescape>import {Request, Response, Router, NextFunction} from "express";
+import {BaseRoute} from "./base_route";</code></pre></p>
+          </section>
+          <section>
+            <p><pre><code data-trim data-noescape>export class HeroRoute extends BaseRoute {
+  constructor() {
+    super();
+  }
+}</code></pre></p>
+          </section>
+          <section>
+            <p><pre><code data-trim data-noescape>
+  public static create(router: Router) {
+    let routes = new HeroRoute();
+
+    router.get("/heros",
+      routes.list
+    );
+  }
+
+  private list(req, res: Response, next) {
+    res.status(200).json(data);
+  }</code></pre></p>
+          </section>
+        </section>
+
+        <section>
+          <h2>server.ts</h2>
+          <p><pre><code data-trim data-noescape>import {HeroRoute} from "./routes/hero_route";</code></pre></p>
+        </section>
+        <section>
+          <h2>server.ts - routes()</h2>
+          <p><pre><code data-trim data-noescape>HeroRoute.create(router);</code></pre></p>
+        </section>
+
+        <section>
+          <h2>index.ts - Startpunkt</h2>
+          <p><pre><code data-trim data-noescape>function getAsync() {
+  console.log("getAsync");
+}
+
+async function getAsyncExp() {
+  console.log("getAsyncExp");
+}
+
+$( document ).ready(function() {
+    console.log("ready!");
+
+    $("#get_async").on("click", getAsync);
+    $("#async_await").on("click", getAsyncExp);
+});</code></pre></p>
+        </section>
+
+        <section>
+          <h2>Generische getAsync</h2>
+          <p><pre><code data-trim data-noescape>function getAsync<T>(): Promise<T> {
+  return Promise.resolve(
+    $.getJSON("http://localhost:8089/heros")
+  );
+}</code></pre></p>
+        </section>
+
+        <section>
+          <h2>Generisches getAsync - Verwendung</h2>
+          <p><pre><code data-trim data-noescape>$("#get_async").on("click", 
+      () => {
+        getAsync<HerosDB>().then(appendHeros);
+      }
+    );</code></pre></p>
+        </section>
+
+        <section>
+          <h2>appendHeros - String Substitution</h2>
+          <p><pre><code data-trim data-noescape>function appendHeros(herosDB: HerosDB) {
+  let tableBody = $("table tbody");
+  tableBody.find("tr").remove();
+  herosDB.heros.forEach(
+    (hero) => {
+      tableBody.append(
+        `<tr><td>${hero.id}</td><td>${hero.name}</td></tr>`
+      )
+    }
+  );
+}</code></pre></p>
+        </section>
+
+        <section>
+          <h2>webpack - Tasks</h2>
+          <p><pre><code data-trim data-noescape>"deploy:webpack": "./node_modules/webpack/bin/webpack.js build/index.js build/index_bundle.js",
+"watch:webpack": "nodemon --verbose -w build/index.js --on-change-only -d 1 --exec \"npm run deploy:webpack\""</code></pre></p>
+        </section>
+
+        <section>
+          <h2>async/await</h2>
+          <p><pre><code data-trim data-noescape>async function getAsyncExp() {
+  let herosDB = await getAsync<HerosDB>();
+  appendHeros(herosDB);
+}</code></pre></p>
+        </section>
+
+        <section>
+          <h2></h2>
+          <p><pre><code data-trim data-noescape></code></pre></p>
+        </section>
+
         <section style="font-size:90%;">
           <h2 class="clearfix" style="width: 100%; height: 220px;">
             <div style="float: left; width: 20%;">
