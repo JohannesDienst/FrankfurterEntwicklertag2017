@@ -57,7 +57,7 @@
         </section>
 
         <section>
-          <h2>tsconfig.json</h2>
+          <h2>src/tsconfig.json</h2>
           <p><pre><code data-trim data-noescape>$> ./../node_modules/typescript/bin/tsc --init
 message TS6071: Successfully created a tsconfig.json file.</code></pre></p>
         </section>
@@ -139,10 +139,6 @@ message TS6071: Successfully created a tsconfig.json file.</code></pre></p>
     {
       "id": 4,
       "name": "Superman"
-    },
-    {
-      "id": 5,
-      "name": "Vibe"
     }
   ]
 }</code></pre></p>
@@ -178,18 +174,17 @@ import {BaseRoute} from "./base_route";</code></pre></p>
 }</code></pre></p>
           </section>
           <section>
-            <p><pre><code data-trim data-noescape>
-  public static create(router: Router) {
-    let routes = new HeroRoute();
+            <p><pre><code data-trim data-noescape>public static create(router: Router) {
+  let routes = new HeroRoute();
 
-    router.get("/heros",
-      routes.list
-    );
-  }
+  router.get("/heros",
+    routes.list
+  );
+}
 
-  private list(req, res: Response, next) {
-    res.status(200).json(data);
-  }</code></pre></p>
+private list(req, res: Response, next) {
+  res.status(200).json(data);
+}</code></pre></p>
           </section>
         </section>
 
@@ -221,8 +216,8 @@ $( document ).ready(function() {
         </section>
 
         <section>
-          <h2>Generische getAsync</h2>
-          <p><pre><code data-trim data-noescape>function getAsync<T>(): Promise<T> {
+          <h2>Generisches getAsync</h2>
+          <p><pre><code data-trim data-noescape>function getAsync&lt;T&gt;(): Promise&lt;T&gt: {
   return Promise.resolve(
     $.getJSON("http://localhost:8089/heros")
   );
@@ -232,21 +227,21 @@ $( document ).ready(function() {
         <section>
           <h2>Generisches getAsync - Verwendung</h2>
           <p><pre><code data-trim data-noescape>$("#get_async").on("click", 
-      () => {
-        getAsync<HerosDB>().then(appendHeros);
-      }
-    );</code></pre></p>
+  () => {
+    getAsync&lt;HerosDB&gt;().then(appendHeros);
+  }
+);</code></pre></p>
         </section>
 
         <section>
-          <h2>appendHeros - String Substitution</h2>
+          <h2>appendHeros - String Templating</h2>
           <p><pre><code data-trim data-noescape>function appendHeros(herosDB: HerosDB) {
   let tableBody = $("table tbody");
   tableBody.find("tr").remove();
   herosDB.heros.forEach(
     (hero) => {
       tableBody.append(
-        `<tr><td>${hero.id}</td><td>${hero.name}</td></tr>`
+        `&lt;tr&gt;&lt;td&gt;${hero.id}&lt;/td&gt;&lt;td&gt;${hero.name}&lt;/td&gt;&lt;/tr&gt;`
       )
     }
   );
@@ -262,14 +257,9 @@ $( document ).ready(function() {
         <section>
           <h2>async/await</h2>
           <p><pre><code data-trim data-noescape>async function getAsyncExp() {
-  let herosDB = await getAsync<HerosDB>();
+  let herosDB = await getAsync&lt;HerosDB&gt;();
   appendHeros(herosDB);
 }</code></pre></p>
-        </section>
-
-        <section>
-          <h2></h2>
-          <p><pre><code data-trim data-noescape></code></pre></p>
         </section>
 
         <section style="font-size:90%;">
